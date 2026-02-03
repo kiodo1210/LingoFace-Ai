@@ -1,0 +1,8 @@
+{
+  "name": "Copy of Copy of LingoFace AI",
+  "description": "Premium AI language tutoring app featuring real-human avatar tutors, real-time emotion synchronization, and nuance-aware coaching.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
