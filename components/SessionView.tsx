@@ -40,112 +40,150 @@ const SessionView: React.FC<SessionViewProps> = ({ onEndSession, expertise }) =>
   return (
     <div className="fixed inset-0 bg-black z-[60] flex flex-col md:flex-row overflow-hidden">
       {/* Main Video Stage (Tutor) */}
-      <div className="relative flex-1 bg-slate-900 overflow-hidden">
+      <div className="relative flex-1 bg-[#020617] overflow-hidden group">
+        {/* HUD Overlay Elements */}
+        <div className="absolute inset-0 pointer-events-none z-20">
+          <div className="absolute top-0 left-0 w-32 h-32 border-t-2 border-l-2 border-indigo-500/30 m-6 rounded-tl-3xl"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 border-t-2 border-r-2 border-indigo-500/30 m-6 rounded-tr-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 border-b-2 border-l-2 border-indigo-500/30 m-6 rounded-bl-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-32 h-32 border-b-2 border-r-2 border-indigo-500/30 m-6 rounded-br-3xl"></div>
+
+          {/* Scanning Line */}
+          <div className="absolute inset-x-0 h-[1px] bg-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.5)] animate-scan"></div>
+        </div>
+
         {/* Tutor Real Image (Simulated Video) */}
-        <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1600" 
-            alt="Tutor" 
-            className="w-full h-full object-cover opacity-90 transition-opacity duration-1000"
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1600"
+            alt="Tutor"
+            className="w-full h-full object-cover opacity-80"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/60"></div>
+          <div className="absolute inset-0 bg-indigo-500/5 mix-blend-overlay"></div>
         </div>
 
         {/* Top Indicators */}
-        <div className="absolute top-6 left-6 right-6 flex justify-between items-start pointer-events-none">
-          <div className="glass px-4 py-2 rounded-full flex items-center gap-3">
-             <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-             <span className="text-xs font-bold tracking-widest uppercase">Live Session: {expertise}</span>
+        <div className="absolute top-10 left-10 right-10 flex justify-between items-start z-30 pointer-events-none">
+          <div className="flex flex-col gap-2">
+            <div className="glass px-5 py-2.5 rounded-2xl flex items-center gap-3 border-indigo-500/30">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div>
+              <span className="text-[10px] font-black tracking-[0.2em] uppercase text-white">NEURAL LINK ACTIVE</span>
+            </div>
+            <div className="px-5 text-indigo-400/80 text-[9px] font-black uppercase tracking-[0.3em]">{expertise} MODULE</div>
           </div>
-          <div className="flex gap-2">
-            <button className="glass p-3 rounded-full pointer-events-auto hover:bg-white/20 transition-colors">
-               <i className="fas fa-gear"></i>
+          <div className="flex gap-3">
+            <button className="glass w-12 h-12 rounded-2xl pointer-events-auto hover:bg-white/10 transition-all border-white/5 flex items-center justify-center">
+              <i className="fas fa-expand text-slate-300"></i>
             </button>
           </div>
         </div>
 
         {/* User Mini Video */}
-        <div className="absolute bottom-24 right-6 w-32 h-48 md:w-48 md:h-64 rounded-2xl overflow-hidden glass border-2 border-white/20 shadow-2xl">
-          <video ref={videoRef} autoPlay muted playsInline className="w-full h-full object-cover grayscale-[30%]" />
-          <div className="absolute bottom-2 left-2 flex items-center gap-1">
-             <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-             <span className="text-[10px] font-bold">You</span>
+        <div className="absolute bottom-10 left-10 w-40 h-56 md:w-56 md:h-72 rounded-3xl overflow-hidden glass border border-white/10 shadow-2xl z-30 group/user">
+          <video ref={videoRef} autoPlay muted playsInline className="w-full h-full object-cover grayscale-[20%]" />
+          <div className="absolute inset-0 bg-indigo-500/10 opacity-0 group-hover/user:opacity-100 transition-opacity"></div>
+          <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+            <span className="text-[9px] font-black uppercase tracking-widest text-white">SUBJECT: YOU</span>
           </div>
         </div>
 
         {/* Live Subtitles / AI Reaction */}
-        <div className="absolute bottom-32 left-1/2 -translate-x-1/2 w-full max-w-2xl px-6 pointer-events-none">
+        <div className="absolute bottom-36 left-1/2 -translate-x-1/2 w-full max-w-xl px-6 pointer-events-none z-30">
           {feedback && (
-            <div className="glass p-4 rounded-2xl animate-slideUp text-center space-y-2 border-l-4 border-indigo-500">
-               <p className="text-indigo-400 text-xs font-bold uppercase tracking-wider">Emotion Sync</p>
-               <p className="text-lg font-medium">"{feedback.emotionSync}"</p>
+            <div className="glass p-6 rounded-[2rem] animate-slideUp text-center space-y-3 border-b-4 border-indigo-500 shadow-2xl backdrop-blur-2xl">
+              <div className="flex items-center justify-center gap-2 text-indigo-400 text-[9px] font-black uppercase tracking-[0.3em]">
+                <i className="fas fa-brain animate-pulse"></i> Emotion Sync Result
+              </div>
+              <p className="text-xl font-black italic tracking-tight text-white">"{feedback.emotionSync}"</p>
             </div>
           )}
         </div>
 
         {/* Control Bar */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-slate-900/80 backdrop-blur-xl px-8 py-4 rounded-full border border-white/10 shadow-2xl">
-          <button className="w-12 h-12 rounded-full glass hover:bg-white/10 flex items-center justify-center text-slate-300">
-             <i className="fas fa-video"></i>
-          </button>
-          <button 
-            onClick={() => setIsRecording(!isRecording)}
-            className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl transition-all ${isRecording ? 'bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)] scale-110' : 'bg-white text-slate-900'}`}
-          >
-             <i className={`fas ${isRecording ? 'fa-microphone-slash' : 'fa-microphone'}`}></i>
-          </button>
-          <button onClick={onEndSession} className="w-12 h-12 rounded-full bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white transition-all flex items-center justify-center">
-             <i className="fas fa-phone-slash"></i>
-          </button>
+        <div className="absolute bottom-10 right-10 flex flex-col md:flex-row items-center gap-4 z-40">
+          <div className="flex items-center gap-4 bg-slate-900/40 backdrop-blur-3xl px-6 py-4 rounded-[2rem] border border-white/10 shadow-2xl">
+            <button className="w-12 h-12 rounded-2xl glass hover:bg-white/10 flex items-center justify-center text-slate-300 transition-all">
+              <i className="fas fa-video-slash"></i>
+            </button>
+            <div className="w-[1px] h-8 bg-white/10 mx-2"></div>
+            <button
+              onClick={() => setIsRecording(!isRecording)}
+              className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center text-2xl transition-all duration-500 ${isRecording ? 'bg-red-500 shadow-[0_0_30px_rgba(239,68,68,0.6)] scale-110' : 'bg-white text-slate-950 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]'}`}
+            >
+              <i className={`fas ${isRecording ? 'fa-stop' : 'fa-microphone'}`}></i>
+            </button>
+            <div className="w-[1px] h-8 bg-white/10 mx-2"></div>
+            <button onClick={onEndSession} className="w-14 h-14 rounded-2xl bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-all flex items-center justify-center border border-red-500/20">
+              <i className="fas fa-phone-slash text-xl"></i>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Side Panel (Coaching & Input) */}
-      <div className="w-full md:w-[400px] glass border-l border-white/10 flex flex-col">
-        <div className="p-6 border-b border-white/10">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <i className="fas fa-wand-magic-sparkles text-indigo-400"></i>
-            Pinpoint Coaching
-          </h2>
-          <p className="text-xs text-slate-400">Real-time corrections and feedback</p>
+      <div className="w-full md:w-[450px] glass border-l border-white/10 flex flex-col z-50 overflow-hidden">
+        <div className="p-8 border-b border-white/10 bg-white/5">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-2xl font-black tracking-tight flex items-center gap-3">
+              <i className="fas fa-wand-magic-sparkles text-indigo-400 animate-pulse"></i>
+              Cognitive Feed
+            </h2>
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+              <i className="fas fa-database text-indigo-500 text-xs"></i>
+            </div>
+          </div>
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Neural processing engine v2.4</p>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
           {!feedback && !isLoading && (
-            <div className="h-full flex flex-col items-center justify-center text-center opacity-50 space-y-4">
-               <i className="fas fa-comment-dots text-4xl"></i>
-               <p className="text-sm">Speak or type something to start receiving coaching feedback.</p>
+            <div className="h-full flex flex-col items-center justify-center text-center opacity-30 space-y-6">
+              <div className="w-20 h-20 rounded-3xl border-2 border-dashed border-white/20 flex items-center justify-center">
+                <i className="fas fa-comment-dots text-4xl"></i>
+              </div>
+              <p className="text-sm font-medium leading-relaxed">System standby.<br />Initiate vocal input for cognitive mapping.</p>
             </div>
           )}
 
           {isLoading && (
-            <div className="space-y-4 animate-pulse">
-               <div className="h-24 bg-slate-800 rounded-xl"></div>
-               <div className="h-32 bg-slate-800 rounded-xl"></div>
+            <div className="space-y-6 animate-pulse">
+              <div className="h-32 bg-white/5 rounded-3xl border border-white/5"></div>
+              <div className="h-40 bg-white/5 rounded-3xl border border-white/5"></div>
             </div>
           )}
 
           {feedback && (
-            <div className="animate-fadeIn space-y-6">
+            <div className="animate-fadeIn space-y-8">
               {/* Nuance Filter */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase">
-                  <i className="fas fa-filter"></i> Nuance Filter
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-indigo-400 text-xs font-black uppercase tracking-widest">
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>
+                  Correction Matrix
                 </div>
-                <div className="p-4 bg-slate-800/50 rounded-xl space-y-2 border border-white/5">
-                  <p className="text-slate-500 text-xs line-through italic">"{feedback.original}"</p>
-                  <p className="text-green-400 font-medium">"{feedback.correction}"</p>
-                  <p className="text-xs text-slate-400 leading-relaxed">{feedback.explanation}</p>
+                <div className="p-6 bg-slate-900/50 rounded-3xl space-y-4 border border-white/10 shadow-xl relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <i className="fas fa-check-circle text-6xl"></i>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-slate-500 text-xs line-through italic font-medium opacity-60">"{feedback.original}"</p>
+                    <p className="text-indigo-300 text-lg font-black tracking-tight">"{feedback.correction}"</p>
+                  </div>
+                  <div className="h-[1px] w-full bg-white/5"></div>
+                  <p className="text-xs text-slate-400 leading-relaxed font-medium">{feedback.explanation}</p>
                 </div>
               </div>
 
               {/* Coaching Point */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase">
-                  <i className="fas fa-bullseye"></i> Pinpoint Tip
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-purple-400 text-xs font-black uppercase tracking-widest">
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
+                  Neural Optimization
                 </div>
-                <div className="p-4 bg-purple-500/10 rounded-xl border border-purple-500/20">
-                  <p className="text-sm italic">"{feedback.coachingPoint}"</p>
+                <div className="p-6 bg-purple-500/5 rounded-3xl border border-purple-500/20 shadow-lg relative overflow-hidden">
+                  <div className="absolute -left-4 -top-4 w-20 h-20 bg-purple-500/10 rounded-full blur-2xl"></div>
+                  <p className="text-sm italic font-medium text-purple-100 leading-relaxed relative z-10">"{feedback.coachingPoint}"</p>
                 </div>
               </div>
 
@@ -160,24 +198,24 @@ const SessionView: React.FC<SessionViewProps> = ({ onEndSession, expertise }) =>
 
         {/* Manual Input (Mock for Microphone) */}
         <div className="p-6 border-t border-white/10 space-y-4">
-           <div className="relative">
-              <input 
-                type="text" 
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSendInput()}
-                placeholder="Type what you want to say..." 
-                className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-12"
-              />
-              <button 
-                onClick={handleSendInput}
-                disabled={isLoading}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-xs hover:bg-indigo-700 disabled:opacity-50"
-              >
-                <i className="fas fa-arrow-up"></i>
-              </button>
-           </div>
-           <p className="text-[10px] text-center text-slate-500 uppercase tracking-tighter">Enter to send or use microphone for voice-to-coaching</p>
+          <div className="relative">
+            <input
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSendInput()}
+              placeholder="Type what you want to say..."
+              className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-12"
+            />
+            <button
+              onClick={handleSendInput}
+              disabled={isLoading}
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-xs hover:bg-indigo-700 disabled:opacity-50"
+            >
+              <i className="fas fa-arrow-up"></i>
+            </button>
+          </div>
+          <p className="text-[10px] text-center text-slate-500 uppercase tracking-tighter">Enter to send or use microphone for voice-to-coaching</p>
         </div>
       </div>
     </div>
